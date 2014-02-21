@@ -1,0 +1,4 @@
+LabPL
+=====
+
+Laborator Programare logica
