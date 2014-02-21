@@ -1,0 +1,17 @@
+*** Exemplul 2
+fmod MYINT is
+	sort Int .
+	op 0 : -> Int .
+	op s_ : Int -> Int .
+	***op p_ : Int -> Int .
+	op _+_ : Int Int -> Int .
+	***op _-_ : Int Int -> Int .
+	op _*_ : Int Int -> Int .
+	vars M N : Int .
+	eq 0 + M = M . ***eq plus(0, M) = M .
+	eq s N + M = s(N + M) . ***eq plus(s(N), M) = s(plus(N, M)) .
+	***Produs
+	eq 0 * M = 0 .   ***eq mult(0, M) = 0 .
+	eq s N * M = N * M + M .   ***eq mult(s(N), M) = plus(mult(N, M), M) .
+	
+endfm
