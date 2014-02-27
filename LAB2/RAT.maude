@@ -1,0 +1,10 @@
+fmod MYRAT is
+	protecting INT .
+	sort Rat .
+	subsort Int < Rat .
+	op _Pe_ : Int NzInt -> Rat .
+	var A : Int .
+	var B : NzInt .
+	eq A Pe 1 = A .
+
+endfm
