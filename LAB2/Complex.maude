@@ -1,0 +1,14 @@
+*** Numere complexe
+fmod MYCOMPLEX is
+	protecting INT .
+	sort Cmp .
+	subsort Int < Cmp .
+	op _i_ : Int Int -> Cmp .
+	op _add_ : Cmp Cmp -> Cmp .
+	op _mult_ : Cmp Cmp -> Cmp .
+	vars A B C D : Int .
+	***ADUNARE
+	eq (A i B) add (C i D) = (A + C) i (B + D) .
+	***Produs
+	eq (A i B) mult (C i D) = (A * C - B * D) i (A * D + B * C) .
+endfm

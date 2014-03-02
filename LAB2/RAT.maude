@@ -1,10 +1,21 @@
+*** Numere Rationale
 fmod MYRAT is
 	protecting INT .
 	sort Rat .
 	subsort Int < Rat .
 	op _Pe_ : Int NzInt -> Rat .
-	var A : Int .
-	var B : NzInt .
+	op RD : Rat -> Rat .
+	op _plus_ : Rat Rat -> Rat .
+	op _prod_ : Rat Rat -> Rat .
+	var A C : Int .
+	var B D : NzInt .
 	eq A Pe 1 = A .
+	eq 0 Pe B = 0 .
+	eq RD(A Pe B) = if not(gcd(A, B) == 1) 
+					   then ((A quo gcd(A, B)) Pe (B quo gcd(A, B))) 
+				    else A Pe B fi . *** NU UMBLA LA EL!!!
+	eq (A Pe B) plus (C Pe D) = RD((D * A + B * C) Pe (B * D)) . ***MERGE
+	eq (A Pe B) prod (C Pe D) = RD(A * C Pe B * D) .
+	
 
 endfm

@@ -1,0 +1,38 @@
+*** Data Calendaristica
+fmod MYDATE is
+	protecting INT .
+	sort Data .
+	subsort Int < Data .
+	op date : Int Int Int -> Data .
+	op valid : Data -> Bool .
+	op add : Nat Data -> Data .
+	vars ZI LN AN : Int .
+	var X : Nat .
+	eq valid(date(ZI, LN, AN)) = if (ZI > 31 or ZI == 0) then false *** Validare zi
+	                                 else if (LN < 1 or LN > 12) then false  *** Validare Luna
+	                               		     else if((LN == 4 or LN == 6 or LN == 9 or LN == 11) and ZI > 30) then false 
+	                               				     else if(LN == 2 and (4 divides AN) and ZI == 29) then true 
+	                               							 else if(LN == 2 and ZI > 28) then false 
+	                               									else if AN < 1 then false *** Validare an
+	                               			 							    else true 
+	                               			 							 fi
+	                               			 						fi 
+	                               			 			   fi 
+	                               		    	   fi
+	                                      fi
+	                              fi .	
+   eq add(X, date(ZI, LN, AN)) = if(valid(date(ZI + X, LN, AN))) then date(ZI + X, LN, AN)
+   									else if (LN == 12 and ZI + 1 > 31) then add(X - 1, date(1, 1, AN + 1))
+   								            else if((LN == 4 or LN == 6 or LN == 9 or LN == 11) and ZI + 1 >= 30) then add(X - 1, date(1, LN + 1, AN))
+   											        else if((LN == 1 or LN == 3 or LN == 5 or LN == 7 or LN == 8 or LN == 10) and ZI + 1 >= 31) then add(X - 1, date(1, LN + 1, AN))
+   									                     else if(LN == 2 and (4 divides AN) and ZI + 1 >= 30) then  add(X - 1, date(1, LN + 1, AN))
+   									                     	    else if(LN == 2 and ZI + 1 > 28) then add(X - 1, date(1, LN + 1, AN)) 
+   									                     	    		else date(ZI, LN, AN) 
+   									                     	    	 fi
+   									                     	  fi
+   									                     fi
+   									             fi
+   									      fi
+   								 fi .	
+   
+endfm
