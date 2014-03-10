@@ -1,0 +1,52 @@
+*** Exercitii lab 3: Liste si Arbori
+*** LISTE var 2
+fmod LIST-INT2 is
+	protecting INT .
+	sorts NList List .
+	subsort Int < NList < List .
+	op nil : -> List .
+	op _ _ : Int List -> NList [id: nil] .
+	op append : List List -> List .
+	op reverse : List -> List .
+	op sortare : List -> List .
+	op iSort : List List -> List .
+	op insert : Int List -> List .
+endfm
+
+fmod LENGTH is
+	protecting LIST-INT2 .
+	op length : List -> Nat .
+	op _in_ : Int NList -> Bool .
+	vars I J I2 : Int .
+	vars L L1 L2 : List .
+	eq length(nil) = 0 .
+	eq length(I L) = 1 + length(L) .
+	
+	eq I in (J L) = if I == J then true
+						else I in L
+					 fi .
+	eq I in J = if I == J then true
+	               else false
+	            fi . 
+	eq I in nil = false .
+	
+	***Append
+	eq append(I L1, L2) = I append(L1, L2) .
+	eq append(nil, L2) = L2 .
+	
+	***REVERSE
+	eq reverse(I L) = append(reverse(L), I) .
+	eq reverse(I) = I .
+	eq reverse(nil) = nil .
+	
+	***SORTARE
+	eq sortare(L) = iSort(L, nil) .
+	
+	eq iSort(nil, L) = L .
+	eq iSort(I L1, L2) = iSort(L1, insert(I, L2)) .
+	eq insert(I, nil) = I . *** insereaza 
+	eq insert(I, I2 L2) = if I <= I2 then I I2 L2
+							else I2 insert(I, L2)
+						  fi .
+	
+endfm
