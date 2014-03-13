@@ -1,0 +1,83 @@
+ *** ARBORI BINARI
+ 
+ fmod MYLIST is
+ 	protecting INT .
+	sorts List NList .
+	subsort Int < NList < List .
+	op nil : -> List .
+	op _ _ : Int List -> NList [id: nil] .
+	op _in_ : Int NList -> Bool .
+	op len : List -> Int .
+	op append : List List -> List .
+	op reverse : List -> List .
+	op sorty : List -> List .
+	op min : List -> Int .
+ 	
+ 	var A B : Int .
+ 	var P Q : List .
+ 	
+ 	eq len(nil) = 0 .
+ 	eq len(A P) = len(P) + 1 .
+ 	eq B in (A P) = if A == B then true else B in P fi .
+ 	eq B in A = (A == B) .
+ 	eq B in nil = false .
+ 	eq append(A P, Q) = A append(P, Q) .
+ 	eq append(P, nil) = P .
+ 	eq append(nil, Q) = Q .
+ 	eq min(A (B P)) = if A < B then min(A P) else min(B P) fi .
+ 	eq min(A) = A .
+ 	eq min(A B) = if A < B then A else B fi .
+ 	eq sorty(A nil) = A .
+ 	eq sorty(A P) = if A == min(A P) then append(A, sorty(P)) else sorty(append(P, A)) fi .
+ endfm
+
+fmod TREE is
+	protecting INT .
+	protecting MYLIST .
+	sort Tree .
+	op empty : -> Tree .
+	op _ _ _ : Tree Int Tree -> Tree .
+	op mirror : Tree -> Tree .
+	
+	op d : Tree -> Int .
+	
+	op search : Tree Int -> Bool .
+	
+	op SRD : Tree -> List .
+	op RSD : Tree -> List .
+	op SDR : Tree -> List .
+	
+	op ins : Tree Int -> Tree .
+	op btins : List Tree -> Tree .
+	op btsorty : List -> List .
+	
+	vars L R : Tree .
+	var I X : Int .
+	var Q : List .
+	
+	eq mirror(empty) = empty .
+	eq mirror(L I R) = mirror(R) I mirror(L) .
+	
+	eq d(empty) = -1 .
+	eq d(L I R) = if d(L) < d(R) then d(R) + 1 else d(L) + 1 fi .
+	
+	eq search(empty, X) = false .
+	eq search(L I R, X) = (I == X) or search(L, X) or search(R, X) .
+	
+	eq SRD(empty) = nil .
+	eq SRD(L I R) = append(append(SRD(L), I), SRD(R)) .
+	
+	eq RSD(empty) = nil .
+	eq RSD(L I R) = I append(RSD(L), RSD(R)) .
+	
+	eq SDR(empty) = nil .
+	eq SDR(L I R) = append(append(SDR(L), SDR(R)), I) .
+	
+	eq ins(empty, X) = empty X empty .
+	eq ins(L I R, X) = if I < X then L I (ins(R, X)) else (ins(L, X)) I R fi .
+	
+	eq btins(nil, R) = R .
+	eq btins(I Q, R) = btins(Q, ins(R, I)) .
+	
+	eq btsorty(Q) = SRD(btins(Q, empty)) .
+endfm
