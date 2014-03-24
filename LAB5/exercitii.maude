@@ -1,0 +1,38 @@
+view ToInt from TRIV to INT is
+	sort Elt to Int .
+endv
+
+view ToPair from TRIV to INT-PAIR is
+	sort Elt to Pair{Int, Int} .
+endv
+
+fmod PAIR{X :: TRIV, Y :: TRIV} is
+	sort Pair{X, Y} .
+	op [_,_] : X$Elt Y$Elt -> Pair{X, Y} .
+	op first : Pair{X, Y} -> X$Elt .
+	op second : Pair{X, Y} -> Y$Elt .
+	var A : X$Elt .
+	var B : Y$Elt .
+	eq first([A, B]) = A .
+	eq second([A, B]) = B .
+endfm
+
+fmod INT-PAIR is 
+	protecting PAIR{Int, Int} .
+endfm
+
+fmod LIST{X :: TRIV} is
+	sort List{X} .
+	subsort X$Elt < List{X} .
+	op nil : -> List{X} .
+	op _,_ : List{X} List{X} -> List{X} [assoc id: nil] .
+endfm 
+
+fmod LIST-PAIR is
+	protecting LIST{ToPair} .
+	protecting LIST{ToInt} .
+endfm
+
+fmod LIST-INT is
+	protecting LIST{ToInt} .
+endfm
