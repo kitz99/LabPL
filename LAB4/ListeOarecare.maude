@@ -1,0 +1,15 @@
+fmod LIST{X :: TRIV} is
+	sort List{X} .
+	subsort X$Elt < List{X} .
+	op nil : -> List{X} .
+	op _ _ : List{X} List{X} -> List{X} [assoc id: nil] .
+
+endfm
+
+view String from TRIV to STRING is
+	sort Elt to String .
+endv
+
+fmod LIST-STRING is
+	protecting LIST{String} .
+endfm
