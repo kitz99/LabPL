@@ -1,0 +1,61 @@
+*** Modul parametrizat pentru perechi oarecare
+fmod PAIR{X :: TRIV, Y :: TRIV} is
+	sort Pair{X, Y} .
+	op [_,_] : X$Elt Y$Elt -> Pair{X, Y} .
+	op first : Pair{X, Y} -> X$Elt .
+	op second : Pair{X, Y} -> Y$Elt .
+	var A : X$Elt .
+	var B : Y$Elt .
+	eq first([A,B]) = A .
+	eq second([A, B]) = B .
+endfm
+
+*** Modul Parametrizat pentru liste cu elemente oarecare
+fmod LIST{X :: TRIV} is
+	sort List{X} .
+	subsort X$Elt < List{X} .
+	op nil : -> List{X} .
+	op _ _ : List{X} List{X} -> List{X} [assoc id: nil] .
+
+endfm
+
+*** view de la TRIV la INT
+view Int from TRIV to INT is
+	sort Elt to Int .
+endv 
+
+*** view de la TRIV la STRING
+view String from TRIV to STRING is
+	sort Elt to String .
+endv
+
+*** view de la TRIV la pereche de forma [int, string]
+view ToPair from TRIV to PAIR-INT-STRING is
+	sort Elt to Pair{Int, String} .
+endv
+
+*** modul pentru perechi de forma [int, string]
+fmod PAIR-INT-STRING is
+	protecting PAIR{Int, String} .
+endfm
+
+*** Modul pentru lista de intregi
+fmod LIST-INT is
+	protecting LIST{Int} .
+endfm
+
+*** modul pentru liste de perechi
+fmod LIST-PAIR is
+	protecting LIST{ToPair} .
+	protecting LIST{String} .
+	protecting LIST{Int} .
+	op @first : List{ToPair} -> List{Int} .
+	op @second : List{ToPair} -> List{String} .
+	var P : Pair{Int, String} .
+	var L : List{ToPair} .
+	eq @first(nil) = nil .
+	eq @first(P L) = first(P) @first(L) .
+	eq @second(nil) = nil .
+	eq @second(P L) = second(P) @second(L) .
+endfm
+
