@@ -1,0 +1,36 @@
+fth GRUP is
+	sort Grup .
+	op _@_ : Grup Grup -> Grup [assoc] .
+	op e : -> Grup .
+	op !_ : Grup -> Grup .
+	
+	var N : Grup .
+	eq e @ N = N [nonexec] .
+	eq N @ e = N [nonexec] . 
+	eq N @ (! N) = e [nonexec] .
+	eq (! N) @ N = e [nonexec] .
+	
+endfth
+
+*** morfistm de grupuri
+fmod HOM-GRUP {G :: GRUP, H :: GRUP} is
+	op h : G$Grup -> H$Grup .
+	vars X  Y : G$Grup .
+	
+	eq h(e) = e .
+	eq h(! X) = ! h(X) .
+	eq h(X @ Y) = h(X) @ h(Y) . 
+endfm
+
+view Grup-Int from GRUP to INT is
+	sort Grup to Int .
+	op e to 0 .
+	op !_ to -_ .
+	op _@_ to _+_ .
+endv
+
+fmod Grup-de-intregi is
+	protecting HOM-GRUP{Grup-Int, Grup-Int} .
+	var X : Int .
+	eq h(X) = X .
+endfm

@@ -1,0 +1,58 @@
+fth TOSET is
+	protecting BOOL .
+	sort Elt .
+	op _<=_ : Elt Elt -> Bool .
+	vars X Y Z : Elt .
+	eq X <= X = true .
+	ceq X <= Z = true if (Y <= Z) and (X <= Y) [nonexec] .
+	ceq X = Y if (X <= Y) and (Y <= X) [nonexec] .
+	ceq X = Y if not(X <= Y) and not (X <= Y) [nonexec] .
+endfth
+
+fmod LIST{X :: TOSET} is
+	sort List{X} .
+	subsort X$Elt < List{X} .
+	protecting INT .
+	
+	op nil : -> List{X} .
+	op _ _ : X$Elt List{X} -> List{X} [id: nil] .
+	op length : List{X} -> Int .
+	op append : List{X} List{X} -> List{X} .
+	op isort : List{X} List{X} -> List{X} .
+	op insert : X$Elt List{X} -> List{X} .
+	op sortare : List{X} -> List{X} . 
+	op _<<<_ : List{X} List{X} -> Bool .
+	op cmp : List{X} List{X} -> Bool .
+	op cmp2 : X$Elt X$Elt -> Bool .
+	
+	vars I I1 I2 N : X$Elt .
+	vars T L L1 L2 : List{X} .
+	
+	eq length(nil) = 0 .
+	eq length(I L) = 1 + length(L) .
+	eq append(N L, T) = N append (L,T) .
+	eq append(nil , L) = L .
+	eq sortare(L) = isort(L, nil) .
+	eq isort(nil,L) = L .
+	eq isort(I L1 , L2) = isort (L1, insert(I,L2)) .
+	eq insert(I , nil) = I .
+	eq insert(I, I2 L2) = if I <= I2 then I I2 L2
+							else append(I2, insert(I,L2)) fi .
+							
+	ceq L1 <<< L2 = true if length(L1) < length(L2) .
+	ceq L1 <<< L2 = cmp(L1,L2) if length(L1) == length(L2) .
+	eq cmp(nil,nil) = true .
+	eq cmp2(I1, I2) = I1 <= I2 .
+	
+    ceq cmp2(I1,I2) = false if not(I1 <= I2) .
+	eq cmp(I1 L1, I2 L2) = (I1 <= I2) and cmp(L1,L2) .
+	
+endfm
+
+view MyInt from TOSET to INT is
+	sort Elt to Int .
+endv
+
+fmod IntList is
+	protecting LIST{MyInt} .
+endfm
