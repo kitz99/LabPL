@@ -1,0 +1,23 @@
+fth TRIV# is
+	including TRIV .
+    var I : X$Elt .
+	var L : Lista{X} .
+	eq len(nil) = 0 .
+	eq len(I L) = 1 + len(L)
+endfth
+fmod LISTA{X :: TRIV} is
+	sort Lista{X} .
+	subsort Int < X$Elt < Lista{X} .
+	sort Int .
+	op nil : -> Lista{X} .
+	op _ _ : X$Elt Lista{X} -> Lista{X} [id: nil].
+	op len : Lista{X} -> X$Elt .
+endfm
+
+view Intreg from TRIV to INT is
+	sort Elt to Int .
+endv
+
+fmod LISTA-INTREGI is 
+	protecting LISTA{Int} .
+endfm

@@ -1,0 +1,35 @@
+fth GRUP is
+	sort Grup .
+	op _@_ : Grup Grup -> Grup [assoc ] .
+	op !_ : Grup -> Grup .
+	op e : -> Grup .
+	
+	vars A B : Grup .
+	eq A @ ! A = e [nonexec] .
+	eq ! A @ A = e [nonexec] .
+	eq A @ e = A [nonexec] . 
+	eq e @ A = A [nonexec] .
+endfth
+
+fmod HOM-GRUP{X :: GRUP, Y :: GRUP} is
+	op h : X$Grup -> Y$Grup .
+	
+	vars A B : X$Grup .
+	
+	eq h(A @ B) = h(A) @ h(B) .
+	eq h(! A) = ! h(A) .
+	eq h(e) = e .
+endfm
+
+view ToInt from GRUP to INT is
+	sort Grup to Int .
+	op _@_ to _+_ .
+	op e to 0 .
+	op !_ to -_ .
+endv
+
+fmod IDE is
+	protecting HOM-GRUP{ToInt, ToInt} .
+	var X : Int .
+	h(X) = X .
+endfm

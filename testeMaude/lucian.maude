@@ -1,0 +1,74 @@
+fmod MyListMada is
+
+	sort List NeList .
+	protecting INT .
+	subsort Int < NeList < List .
+	
+	op nil : -> List .
+	op _ _ : List List -> List [assoc id: nil].
+	op get : Int List -> Int .
+	
+	op mySORT : List -> List .
+	
+	op range : Int Int -> List .
+	op minim : List -> Int .
+		
+	op sortare : List -> List .
+	op iSort : List List -> List .
+	op insert : Int List -> List .
+	
+	op len : List -> Int .
+	
+	op mij : List -> Int .
+	
+	op pare : List -> List .
+	op impare : List -> List .
+	
+	vars I I1 I2 I3 : Int .
+	vars L L1 L2 L3 : List .
+	
+	eq get(I1,nil) = nil .
+
+	eq get(I1 , I2 L1) = if (I1 == 1) then I2 
+	                      else get(I1 + -1 , L1) fi .
+	
+	eq range(I1, I2) = if I1 > I2 then nil 
+						else if I1 == I2 then I1
+							   else I1 range(I1 + 1, I2) 
+							   fi
+					   fi .   
+					   
+	eq minim(I1) = I1 .
+	eq minim(I1 L1) = if I1 <= minim(L1) then I1
+	                   else minim(L1) 
+	                  fi .   
+	                  
+	eq sortare(L) = iSort(L, nil) .
+	
+	eq iSort(nil, L) = L .
+	eq iSort(I L1, L2) = iSort(L1, insert(I, L2)) .
+	
+	eq insert(I, nil) = I . *** insereaza 
+	eq insert(I, I2 L2) = if I <= I2 then I I2 L2
+							else I2 insert(I, L2)
+						  fi .   
+						  
+	eq len(nil) = 0 .
+	eq len(I L) = 1 + len(L) . 
+	
+	eq mij(L) = get( (len(L) quo 2) + 1, L ) .
+	
+	eq pare(nil) = nil .
+	eq impare(nil) = nil .
+	
+	eq pare(I L) = if I rem 2 == 0 then I pare(L)
+	                  else pare(L)
+	               fi .
+	eq impare(I L) = if I rem 2 == 1 then I impare(L)
+	                  else impare(L)
+	                 fi .
+	                 
+	eq mySORT(L) = sortare(pare(L)) sortare(impare(L)) .
+	
+	             
+endfm

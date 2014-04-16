@@ -1,0 +1,31 @@
+fth TOSET is
+	protecting BOOL .
+	sort Elt .
+	op _<=_ : Elt Elt -> Bool .
+	vars A B C : Elt .
+	
+	eq A <= A = true [nonexec] .
+	ceq A <= C = true if (A <= B) and (B <= C) [nonexec] .
+	ceq A = B if not (A <= B) and not (B <= A) [nonexec] .
+	eq A <= B or B <= A = true [nonexec] .
+endfth
+
+fmod PAIR{X :: TOSET, Y :: TOSET} is 
+	sort Pair{X, Y} .
+	op [_,_] : X$Elt Y$Elt -> Pair{X, Y} .
+	op _<=_ : Pair{X, Y} Pair{X, Y} -> Bool .
+	
+	var A C : X$Elt .
+	var B D : Y$Elt .
+	
+	eq [A, B] <= [C, D] = ((A <= C) and not (A == C)) or ((A == C ) and (B <= D)) .
+	
+endfm
+
+view TOINT from TOSET to INT is
+	sort Elt to Int .
+endv
+
+fmod PERECHI is
+	protecting PAIR{TOINT, TOINT} .
+endfm

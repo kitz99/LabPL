@@ -1,0 +1,68 @@
+fmod LISTA is
+	protecting INT .
+	sorts NList List .
+	subsort Int < NList < List .
+	op nil : -> List .
+	op _ _ : Int List -> List [id: nil] .
+	op append : List List -> List .
+	op min : List -> Int .
+	op sortare : List -> List .
+	
+	vars L L1 : List .
+	vars I I1 : Int .
+	
+	eq append(L, nil) = L .
+	eq append(nil, L) = L .
+	eq append(I L, L1) = I append(L, L1) .
+	eq min(I) = I .
+	eq min(I I1) = if I <= I1 then I
+					 else I1 
+				   fi .
+	eq min(I (I1 L)) = if I < I1 then min(I L)
+	                      else min (I1 L)
+	                   fi .
+	                   
+	eq sortare(I nil) = I .
+	eq sortare(I L) = if I == min(I L) then append(I, sortare(L))
+	                   else sortare(append(L, I))
+	                  fi .
+endfm
+
+fmod TREE is
+	protecting INT .
+	protecting LISTA .
+	sort Tree .
+	op empty : -> Tree .
+	op _ _ _ : Tree Int Tree -> Tree .
+	op mirror : Tree -> Tree .
+	op d : Tree -> Nat .
+	op search : Int Tree -> Bool .
+	op SRD : Tree -> List .
+	op RSD : Tree -> List .
+	op SDR : Tree -> List .
+	
+	vars L R : Tree .
+	vars I X : Int .
+	
+	eq mirror(empty) = empty .
+	eq mirror(L I R) = mirror(R) I mirror(L) .
+	
+	
+	eq d(empty) = -1 .
+	eq d(L I R) = if d(L) < d(R) then d(R) + 1 
+					else d(L) + 1 
+				  fi .
+				  
+	eq search(X, empty) = false .
+	eq search(X, L I R) = if X == I then true
+							else search(X, L) or search(X, R) 
+						  fi .
+	eq SRD(empty) = nil .
+	eq SRD(L I R) = append(append(SRD(L), I), SRD(R)) .
+	
+	eq RSD(empty) = nil .
+	eq RSD(L I R) = I append(RSD(L), RSD(R)) .
+	
+	eq SDR(empty) = nil .
+	eq SDR(L I R) = append(append(SDR(L), SDR(R)), I) .
+endfm

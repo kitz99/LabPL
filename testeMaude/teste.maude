@@ -1,0 +1,63 @@
+fth TRIVconst is
+sort Elt .
+op @ : -> Elt .
+endfth
+
+fmod MYLIST{X :: TRIVconst} is
+
+sort List{X} .
+subsort X$Elt < List{X} .
+protecting INT .
+
+op nil : -> List{X} .
+op _ _ : X$Elt List{X} -> List{X} [id: nil] .
+op delete : X$Elt List{X} -> List{X} .
+op add : X$Elt List{X} -> List{X} .
+op append : List{X} List{X} -> List{X} .
+***op mylength : List{X} -> Int .
+
+vars L1 L2 : List{X} .
+vars I1 I2 X : X$Elt .
+
+***eq length(nil) = 0 .
+***eq length(I1 L1) = 1 + length(L1) .
+
+eq append(I1 L1, L2) = I1 append (L1,L2) .
+eq append(nil , L1) = L1 .
+
+eq delete(I1,nil) = nil .
+***eq delete(I1 , I2 L1) = if (I2 == I1) then append( @ , delete(I1,L1) )
+***                          else if(length(L1) > 0) then append(I2,delete(I1, L1))
+***                           else L1 fi fi .
+eq delete(I1 , I2 L1) = if (I2 == I1) then @ delete(I1,L1) 
+                    else I2 delete(I1, L1) fi .
+
+
+eq add(X,nil) = nil .
+***eq add(X,I1 L1) = if (I1 == @) then append( X ,add(X,L1))
+***                   else if(length(L1) > 0) then append(I1, add(X,L1))
+***                 else L1 fi fi .
+eq add(X, I1 L1) = if(I1 == @) then X add(X,L1)
+                     else I1 add(X,L1) fi .
+
+
+ 
+endfm
+
+view ToString from TRIVconst to STRING is
+sort Elt to String .
+op @ to term "[]" .
+endv
+
+fmod List-INT is
+protecting MYLIST{ToString} .
+endfm 
+
+view MyInt from TRIVconst to INT is
+sort Elt to Int .
+op @ to 0 .
+endv
+
+fmod List-INT is
+protecting MYLIST{MyInt} .
+endfm

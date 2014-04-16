@@ -1,0 +1,62 @@
+fth TEORIE1 is
+	sort T1 .
+endfth
+
+fth TEORIE2 is
+	sort T2 .
+endfth
+
+fmod PAIR{X :: TEORIE1, Y :: TEORIE2} is
+	sort Pair{X, Y} .
+	op [_,_] : X$T1 Y$T2 -> Pair{X, Y} .
+	
+	op first : Pair{X, Y} -> X$T1 .
+	op second : Pair{X, Y} -> Y$T2 .
+	
+	var A : X$T1 .
+	var B : Y$T2 .
+	
+	eq first([A, B]) = A .
+	eq second([A, B]) = B .
+endfm
+
+view EL1 from TEORIE1 to INT is
+	sort T1 to Int .
+endv
+
+view EL2 from TEORIE2 to STRING is
+	sort T2 to String .
+endv
+
+fmod PERECHE is
+	protecting PAIR{EL1, EL2} .
+endfm
+
+fmod LISTA{X :: TRIV} is 
+	sort List{X} .
+	subsort X$Elt < List{X} .
+	op nil : -> List{X} .
+	op _ _ : List{X} List{X} -> List{X} [assoc id: nil] .
+endfm
+
+view LP from TRIV to PERECHE is
+	sort Elt to Pair{EL1, EL2} .
+endv
+
+fmod LISTA-PERECHI is 
+	protecting LISTA{LP} .
+	protecting LISTA{Int} .
+	protecting LISTA{String} .
+	
+	op @first : List{LP} -> List{Int} .
+	op @second : List{LP} -> List{String} .
+	
+	var A : Pair{EL1, EL2} .
+	var L : List{LP} .
+	
+	eq @first(nil) = nil .
+	eq @first(A L) = first(A) @first(L) .
+	
+	eq @second(nil) = nil .
+	eq @second(A L) = second(A) @second(L) .
+endfm

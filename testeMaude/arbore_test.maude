@@ -1,0 +1,45 @@
+fth MULTIME is
+	sort Elt .
+	op _@_ : Elt Elt -> Elt .
+	op e : -> Elt .
+endfth
+
+fmod ARBORE{X :: MULTIME} is
+	sort Arbore .
+	protecting INT .
+	op empty : -> Arbore .
+	op _ _ _ : Arbore X$Elt Arbore -> Arbore .
+	op mirror : Arbore -> Arbore .
+	
+	op compunere : Arbore -> X$Elt .
+	
+	op nrf : Arbore -> Int .
+	vars L R : Arbore .
+	vars I : X$Elt .
+	
+	eq mirror(empty) = empty .
+	eq mirror(L I R) = mirror(R) I mirror(L) .
+	
+	eq nrf(empty) = 0 .
+	eq nrf(empty I empty) = 1 .
+	
+	eq nrf(L I R) = nrf(L) + nrf(R) .
+	
+	eq compunere(empty) = e .
+	eq compunere(empty I empty) = I .
+	eq compunere(L I R) = compunere(L) @ compunere(R) .
+	
+	
+endfm
+
+view MyInt from MULTIME to INT is
+	sort Elt to Int .
+	op _@_ to _*_ .
+	op e to term 1 .
+endv
+
+fmod TREE is
+	protecting ARBORE{MyInt} .
+endfm
+
+

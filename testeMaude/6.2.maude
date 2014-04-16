@@ -1,0 +1,45 @@
+fth TRIVconst is
+	sort Elt .
+	op @ : -> Elt .
+endfth
+
+fmod LIST{X :: TRIVconst} is
+	sorts List{X} NeList{X} .
+	subsort X$Elt < NeList{X} < List{X} .
+	op nil : -> List{X} .
+	op _ _ : X$Elt List{X} -> NeList{X} [ id: nil ] .
+	
+	op delete : X$Elt List{X} -> List{X} .
+	
+	op add : X$Elt List{X} -> List{X} .
+	
+	vars I J : X$Elt .
+	vars L L1 : List{X} .
+	
+	eq delete(I, nil) = nil .
+	eq delete(J, I L) = if I == J then @ delete(J, L) 
+							else I delete(J, L) 
+					    fi .
+					    
+	eq add(I, nil) = nil .
+	eq add(J, I L) = if I == @ then J add(J, L) 
+						else I add(J, L) 
+					 fi .
+	
+endfm
+
+view ToInt from TRIVconst to INT is
+	sort Elt to Int .
+	op @ to term -1 .
+endv
+
+view ToString from TRIVconst to STRING is
+	sort Elt to String .
+	op @ to term "[]" .
+endv
+
+fmod LIST-INT is
+	protecting LIST{ToInt} .
+	protecting LIST{ToString} .
+endfm
+

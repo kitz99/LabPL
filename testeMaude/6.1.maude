@@ -1,0 +1,70 @@
+fth TOSET is
+	protecting BOOL .
+	sort Elt .
+	op _<=_ : Elt Elt -> Bool .
+	
+	vars A B C : Elt .
+	
+	eq A <= A = true [nonexec] .
+	ceq A <= C = true if (A <= B) and (B <= C) [nonexec] .
+	ceq A = B if not (A <= B) and not (B <= A) [nonexec] .
+	eq A <= B or B <= A = true [nonexec] .
+endfth
+
+fmod LIST{X :: TOSET} is
+	protecting INT .
+	sorts List{X} NeList{X} .
+	subsort X$Elt < NeList{X} < List{X} .
+	
+	op nil : -> List{X} .
+	op _ _ : X$Elt List{X} -> NeList{X} [id: nil].
+	op len : List{X} -> Int .
+	
+	op min : List{X} -> X$Elt .
+	op iSort : List{X} -> List{X} .
+	op append : List{X} List{X} -> List{X} .
+	
+	op comp : List{X} List{X} -> Bool .
+	
+	op _<<<_ : List{X} List{X} -> Bool .
+	
+	vars I I1 : X$Elt .
+	vars L L1 : List{X} .
+	
+	eq len(nil) = 0 .
+	eq len(I L) = 1 + len(L) .
+	
+	eq append(nil, L) = L .
+	eq append(I L, L1) = I append(L, L1) .
+	
+	eq min(I) = I .
+	eq min(I L) = if I <= min(L) then I 
+					else min(L) 
+	              fi .
+	eq iSort(nil) = nil .
+	eq iSort(I L) = if I == min(L) then append(I, iSort(L))  
+					   else append(iSort(L), I) 
+					fi .
+					
+	eq comp(I L, I1 L1) = if I <= I1 and not (I == I1) then true 
+							else if I == I1 then comp(L, L1)
+							     else false 
+							     fi
+						  fi .
+						  
+	eq comp(nil, nil) = true .
+	
+	eq I L <<< I1 L1 = if len(I L) < len(I1 L1) then true
+					      else if len(I1 L1) < len(I L) then false 
+					            else comp(I L, I1 L1)
+					           fi
+					   fi .
+endfm
+
+view ToInt from TOSET to INT is
+	sort Elt to Int .
+endv
+
+fmod LIST-INT is 
+	protecting LIST{ToInt} .
+endfm

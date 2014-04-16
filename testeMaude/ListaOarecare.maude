@@ -1,0 +1,40 @@
+fth TRIV# is
+	including TRIV .
+	op #_ : Elt -> Elt .
+endfth
+
+fmod LIST{X :: TRIV#} is
+	sort List{X} .
+	subsort X$Elt < List{X} .
+	op nil : -> List{X} .
+	op _ _ : List{X} List{X} -> List{X} [assoc id: nil] .
+	
+	op operatie : List{X} -> List{X} .
+
+	var I : X$Elt .
+	var L : List{X} .
+
+	eq operatie(nil) = nil .
+	eq operatie(I L) = (# I) operatie(L) .
+	
+endfm
+
+view TipulMeu from TRIV# to INT is
+	sort Elt to Int .
+	op # X:Elt to term (X:Int * 2) .
+endv
+
+fmod MY-LIST is
+	protecting LIST{TipulMeu} .
+	op minim : List{TipulMeu} -> Int .
+	var I : Int .
+	var L : List{TipulMeu} .
+	var J : Int .
+	eq minim(I) = I .
+	eq minim(I J) = if (I < J) then I
+						else J
+					fi .
+    eq minim(I (J L)) = if I < J then minim(I L)
+                           else minim(J L) 
+                        fi .
+endfm
